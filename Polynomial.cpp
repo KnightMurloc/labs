@@ -7,7 +7,11 @@
 #include <mem.h>
 #include <cmath>
 
-Polynomial::Polynomial(std::vector<double> vec) {
+Polynomial::Polynomial(std::vector<double> &vec) {
+    if (vec.empty()) {
+        throw PolynomialException("vector is empty");
+    }
+
     coefficients = new double[vec.size()];
     memcpy(coefficients, vec.data(), vec.size() * sizeof(double));
     order = (int) vec.size();
@@ -18,9 +22,17 @@ Polynomial::~Polynomial() {
 }
 
 Polynomial::Polynomial(double* coefficients, unsigned int order) {
+    if (coefficients == nullptr) {
+        throw PolynomialException("coefficients is null");
+    }
+
+    if (order == 0) {
+        throw PolynomialException("coefficients is empty");
+    }
+
     this->order = order;
-    coefficients = new double[order];
-    memcpy(coefficients, coefficients, order * sizeof(double));
+    this->coefficients = new double[order];
+    memcpy(this->coefficients, coefficients, order * sizeof(double));
 }
 
 //double Polynomial::getValue(double x)
@@ -28,7 +40,7 @@ Polynomial::Polynomial(double* coefficients, unsigned int order) {
 //arcs:
 // - int x - точка на прямой
 //return - занчение в точке
-double Polynomial::getValue(double x) {
+double Polynomial::getValue(double x) const {
     double result = 0;
     for (int i = 0; i < order; ++i) {
         result += coefficients[i] * pow(x, i);

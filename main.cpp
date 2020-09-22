@@ -1,18 +1,13 @@
-#include <iostream>
-
-#include "Polynomial.h"
-#include <vector>
-#include <iostream>
+#include "Tests/test.h"
 
 using namespace std;
 
 int main() {
 
-    vector<double> vec = {1.1, -2, 3};
-
-    Polynomial polynomial(vec);
-
-    cout << polynomial << endl;
-
+    createCorrectTest();
+    createIncorrectTest();
+    getValueTest();
+    getIncorrectCoefficientTest();
+    setCorrectCoefficientTest();
     return 0;
 }

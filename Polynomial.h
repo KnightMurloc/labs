@@ -13,13 +13,15 @@ private:
     double* coefficients;
     unsigned int order;
 public:
-    explicit Polynomial(std::vector<double> vec);
+    explicit Polynomial(std::vector<double> &vec);
 
     Polynomial(double* coefficients, unsigned int order);
 
     ~Polynomial();
 
-    double getValue(double x);
+    double getValue(double x) const;
+
+    unsigned int getOrder() const { return order };
 
     double getCoefficient(unsigned int order) const;
 
