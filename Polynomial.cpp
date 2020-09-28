@@ -98,3 +98,52 @@ void Polynomial::setCoefficient(double coefficient, unsigned int order) {
     }
     coefficients[order] = coefficient;
 }
+
+Polynomial Polynomial::operator+(Polynomial &p) {
+    unsigned int order = p.order >= this->order ? p.order : this->order;
+    Polynomial polynomial(order);
+    memcpy(polynomial.coefficients, p.coefficients, p.order * sizeof(double));
+    for (int i = 0; i < this->order; ++i) {
+        polynomial.coefficients[i] += this->coefficients[i];
+    }
+    return polynomial;
+}
+
+Polynomial::Polynomial(const Polynomial &p) : order(p.getOrder()) {
+    this->coefficients = new double[order];
+    memcpy(this->coefficients, p.coefficients, order * sizeof(double));
+}
+
+Polynomial::Polynomial(unsigned int m_order) : order(m_order) {
+    coefficients = new double[order * sizeof(double)];
+}
+
+Polynomial Polynomial::operator-(Polynomial &p) {
+    unsigned int order = p.order >= this->order ? p.order : this->order;
+    Polynomial polynomial(order);
+    memcpy(polynomial.coefficients, p.coefficients, p.order * sizeof(double));
+    for (int i = 0; i < this->order; ++i) {
+        polynomial.coefficients[i] -= this->coefficients[i];
+    }
+    return polynomial;
+}
+
+double Polynomial::operator()(double x) {
+    return getValue(x);
+}
+
+const Polynomial Polynomial::operator++(int) {
+    Polynomial polynomial(this->order + 1);
+    memcpy(polynomial.coefficients, this->coefficients, polynomial.order * sizeof(double));
+    return polynomial;
+}
+
+const Polynomial Polynomial::operator--(int) {
+    Polynomial polynomial(this->order - 1);
+    memcpy(polynomial.coefficients, this->coefficients, polynomial.order * sizeof(double));
+    return polynomial;
+}
+
+double Polynomial::operator[](unsigned int i) {
+    return getCoefficient(i);
+}

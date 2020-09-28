@@ -12,16 +12,20 @@ class Polynomial {
 private:
     double* coefficients;
     unsigned int order;
+
+    explicit Polynomial(unsigned int m_order);
 public:
     explicit Polynomial(std::vector<double> &vec);
 
     Polynomial(double* coefficients, unsigned int order);
 
+    Polynomial(const Polynomial &p);
+
     ~Polynomial();
 
     double getValue(double x) const;
 
-    unsigned int getOrder() const { return order };
+    unsigned int getOrder() const { return order; };
 
     double getCoefficient(unsigned int order) const;
 
@@ -29,12 +33,23 @@ public:
 
     std::string toString() const;
 
+    Polynomial operator+(Polynomial &p);
+
+    Polynomial operator-(Polynomial &p);
+
+    double operator()(double x);
+
+    const Polynomial operator++(int);
+
+    const Polynomial operator--(int);
+
+    double operator[](unsigned int i);
+
     friend std::ostream &operator<<(std::ostream &Str, Polynomial const &poly) {
         // print something from v to str, e.g: Str << v.getX();
         Str << poly.toString();
         return Str;
     }
-
 };
 
 //CopyPaste from stackoverflow
