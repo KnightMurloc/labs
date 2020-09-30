@@ -21,7 +21,7 @@ public:
 
     double getValue(double x) const;
 
-    unsigned int getOrder() const { return order };
+    unsigned int getOrder() const { return order; };
 
     double getCoefficient(unsigned int order) const;
 
