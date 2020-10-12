@@ -13,6 +13,8 @@ public:
 
     Polynomial(const Polynomial &p);
 
+    Polynomial(Polynomial &&other) noexcept;
+
     ~Polynomial();
 
     //double Polynomial::getValue(double x)
@@ -49,8 +51,10 @@ public:
 
     double operator()(double x);
 
+    Polynomial &operator++();
     const Polynomial operator++(int);
 
+    Polynomial &operator--();
     const Polynomial operator--(int);
 
     double operator[](unsigned int i);

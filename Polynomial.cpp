@@ -30,6 +30,7 @@ Polynomial::Polynomial(double* coefficients, unsigned int order) {
     this->order = order;
     this->coefficients = new double[order];
     memcpy(this->coefficients, coefficients, order * sizeof(double));
+    count++;
 }
 
 double Polynomial::getValue(double x) const {
@@ -78,32 +79,47 @@ void Polynomial::setCoefficient(double coefficient, unsigned int order) {
 }
 
 Polynomial Polynomial::operator+(Polynomial &p) {
-    unsigned int order = p.order >= this->order ? p.order : this->order;
+    unsigned int order = std::max(p.order, this->order);
     Polynomial polynomial(order);
-    memcpy(polynomial.coefficients, p.coefficients, p.order * sizeof(double));
+    memcpy(polynomial.coefficients, this->coefficients, this->order * sizeof(double));
     for (int i = 0; i < this->order; ++i) {
-        polynomial.coefficients[i] += this->coefficients[i];
+        polynomial.coefficients[i] += p.coefficients[i];
     }
-    return polynomial;
+    if (p.order > this->order) {
+        for (int i = 0; i < p.order - this->order; ++i) {
+            polynomial.coefficients[this->order + i] += p.coefficients[this->order + i];
+        }
+    }
+    return std::move(polynomial);
 }
 
 Polynomial::Polynomial(const Polynomial &p) : order(p.getOrder()) {
     this->coefficients = new double[order];
     memcpy(this->coefficients, p.coefficients, order * sizeof(double));
+    count++;
 }
 
 Polynomial::Polynomial(unsigned int m_order) : order(m_order) {
     coefficients = new double[order * sizeof(double)];
+    count++;
 }
 
 Polynomial Polynomial::operator-(Polynomial &p) {
-    unsigned int order = p.order >= this->order ? p.order : this->order;
+    unsigned int order = std::max(p.order, this->order);
     Polynomial polynomial(order);
-    memcpy(polynomial.coefficients, p.coefficients, p.order * sizeof(double));
+    memset(polynomial.coefficients, 0, order * sizeof(double));
+    memcpy(polynomial.coefficients, this->coefficients, this->order * sizeof(double));
     for (int i = 0; i < this->order; ++i) {
-        polynomial.coefficients[i] -= this->coefficients[i];
+        polynomial.coefficients[i] -= p.coefficients[i];
     }
-    return polynomial;
+    if (p.order > this->order) {
+
+        for (int i = 0; i < p.order - this->order; ++i) {
+
+            polynomial.coefficients[this->order + i] -= p.coefficients[this->order + i];
+        }
+    }
+    return std::move(polynomial);
 }
 
 double Polynomial::operator()(double x) {
@@ -111,15 +127,17 @@ double Polynomial::operator()(double x) {
 }
 
 const Polynomial Polynomial::operator++(int) {
-    Polynomial polynomial(this->order + 1);
-    memcpy(polynomial.coefficients, this->coefficients, polynomial.order * sizeof(double));
-    return polynomial;
+    Polynomial temp = *this;
+    this->order++;
+    this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
+    return temp;
 }
 
 const Polynomial Polynomial::operator--(int) {
-    Polynomial polynomial(this->order - 1);
-    memcpy(polynomial.coefficients, this->coefficients, polynomial.order * sizeof(double));
-    return polynomial;
+    Polynomial temp = *this;
+    this->order--;
+    this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
+    return temp;
 }
 
 double Polynomial::operator[](unsigned int i) {
@@ -155,24 +173,26 @@ Polynomial &Polynomial::operator=(const char* str) {
     delete[] this->coefficients;
     this->coefficients = coefficients;
     this->order = size;
-//    for(int i = 0, j = 0; i < len; j++){
-//        double c;
-//        unsigned int order;
-//        int r_len = scanf("%lgx^%u",&c,&order);
-//        printf("%d\n",r_len);
-//        if(r_len == EOF){
-//            throw PolynomialException("Incorrect Format");
-//        }
-//        printf("%lg %u\n",c,order);
-//        if(order >= this->order){
-//            this->coefficients = (double*) realloc(this->coefficients, sizeof(double) * order);
-//            this->order = order;
-//        }
-//
-//        coefficients[order] = c;
-//        i+=r_len;
-//    }
 
+    return *this;
+}
+
+Polynomial::Polynomial(Polynomial &&other) noexcept {
+    this->coefficients = other.coefficients;
+    other.coefficients = nullptr;
+    this->order = other.order;
+    count++;
+}
+
+Polynomial &Polynomial::operator++() {
+    this->order++;
+    this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
+    return *this;
+}
+
+Polynomial &Polynomial::operator--() {
+    this->order--;
+    this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
     return *this;
 }
 
