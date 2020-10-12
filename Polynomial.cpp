@@ -4,21 +4,18 @@
 
 #include "Polynomial.h"
 
-#include <mem.h>
+//#include <mem.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <cmath>
+#include <cctype>
 
-Polynomial::Polynomial(std::vector<double> &vec) {
-    if (vec.empty()) {
-        throw PolynomialException("vector is empty");
-    }
-
-    coefficients = new double[vec.size()];
-    memcpy(coefficients, vec.data(), vec.size() * sizeof(double));
-    order = (int) vec.size();
-}
+unsigned int Polynomial::count = 0;
 
 Polynomial::~Polynomial() {
     delete[] coefficients;
+    count--;
 }
 
 Polynomial::Polynomial(double* coefficients, unsigned int order) {
@@ -35,11 +32,6 @@ Polynomial::Polynomial(double* coefficients, unsigned int order) {
     memcpy(this->coefficients, coefficients, order * sizeof(double));
 }
 
-//double Polynomial::getValue(double x)
-//вычилсяет значение функции в точке x
-//arcs:
-// - int x - точка на прямой
-//return - занчение в точке
 double Polynomial::getValue(double x) const {
     double result = 0;
     for (int i = 0; i < order; ++i) {
@@ -48,38 +40,28 @@ double Polynomial::getValue(double x) const {
     return result;
 }
 
-//CopyPaste from stackoverflow
-namespace util {
-    template<typename T>
-    std::string to_string(const T &t) {
-        std::string str{std::to_string(t)};
-        int offset{1};
-        if (str.find_last_not_of('0') == str.find('.')) { offset = 0; }
-        str.erase(str.find_last_not_of('0') + offset, std::string::npos);
-        return str;
-    }
-}
-
-//std::string Polynomial::toString()
-//приобразует объект к строке
-//return - строка
-std::string Polynomial::toString() const {
-    std::string str = util::to_string(coefficients[0]);
-    for (int i = 1; i < order; ++i) {
-        if (coefficients[i] > 0) {
-            str += " + " + util::to_string(coefficients[i]) + "x^" + std::to_string(i);
-        } else if (coefficients[i] < 0) {
-            str += " - " + util::to_string(-coefficients[i]) + "x^" + std::to_string(i);
+char* Polynomial::toString() const {
+    //39 максимальное число символов необходимое для записи многочлена
+    //24 - максимальная длина double
+    //10 - максимальная длина uint
+    //3 - +-x^
+    //1 - \0
+    auto str = (char*) malloc(37 * getOrder() + 1);
+    memset(str, 0, 25 * getOrder() + 1);
+    int i = sprintf(str, "%.20g", getCoefficient(0));
+    for (unsigned int j = 1; j < getOrder(); j++) {
+        if (getCoefficient(j) > 0) {
+            i += sprintf(str + i, "+%gx^%d", getCoefficient(j), j);
+        } else if (getCoefficient(j) < 0) {
+            i += sprintf(str + i, "%gx^%d", getCoefficient(j), j);
         }
     }
+    str = (char*) realloc(str, (size_t) i + 1);
+
     return str;
 }
 
-//double Polynomial::getCoefficient(int order)
-//возвращаяет коофицкнт определёного порядка
-//args:
-// - unsigned int order - порядок коофицента
-//return - коофицент
+
 double Polynomial::getCoefficient(unsigned int order) const {
     if (order >= this->order) {
         throw PolynomialException("Out of Range Array");
@@ -87,11 +69,7 @@ double Polynomial::getCoefficient(unsigned int order) const {
     return coefficients[order];
 }
 
-//void Polynomial::setCoefficient(double coefficient, int order)
-//задаёт коофицент лпределёного порядка
-//args:
-// - double coefficient - значение коофицента
-// - unsigned int order - порядок коофицента
+
 void Polynomial::setCoefficient(double coefficient, unsigned int order) {
     if (order >= this->order) {
         throw PolynomialException("Out of Range Array");
@@ -147,3 +125,54 @@ const Polynomial Polynomial::operator--(int) {
 double Polynomial::operator[](unsigned int i) {
     return getCoefficient(i);
 }
+
+Polynomial &Polynomial::operator=(const char* str) {
+    auto* coefficients = new double[this->order];
+    memset(coefficients, 0, this->order * sizeof(double));
+    unsigned int size = this->order;
+    for (int i = 0; i < strlen(str);) {
+        double coef;
+        unsigned int order;
+        int len;
+        int err = sscanf(str + i, "%lgx^%u%n", &coef, &order, &len);
+        if (err != 2) {
+            err = sscanf(str + i, "%lg%n", &coef, &len);
+            if (err != 1) {
+                throw PolynomialException("Inccorect format");
+            }
+            order = 0;
+        }
+
+
+        if (order >= size) {
+            size = order + 1;
+            coefficients = (double*) realloc(coefficients, size * sizeof(double));
+        }
+        coefficients[order] += coef;
+        i += len;
+    }
+
+    delete[] this->coefficients;
+    this->coefficients = coefficients;
+    this->order = size;
+//    for(int i = 0, j = 0; i < len; j++){
+//        double c;
+//        unsigned int order;
+//        int r_len = scanf("%lgx^%u",&c,&order);
+//        printf("%d\n",r_len);
+//        if(r_len == EOF){
+//            throw PolynomialException("Incorrect Format");
+//        }
+//        printf("%lg %u\n",c,order);
+//        if(order >= this->order){
+//            this->coefficients = (double*) realloc(this->coefficients, sizeof(double) * order);
+//            this->order = order;
+//        }
+//
+//        coefficients[order] = c;
+//        i+=r_len;
+//    }
+
+    return *this;
+}
+

@@ -5,25 +5,13 @@
 #include "test.h"
 
 #include "../Polynomial.h"
-#include <vector>
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
 //проверка коректности создания объекта с коректными данными
 void createCorrectTest() {
-    {
-        vector<double> vec = {2, 5, 7};
-        Polynomial polynomial(vec);
-        if (
-                polynomial.getCoefficient(0) != 2 ||
-                polynomial.getCoefficient(1) != 5 ||
-                polynomial.getCoefficient(2) != 7
-                ) {
-            cout << "create correct test Failed" << endl;
-        }
-    }
-
     {
         double array[5] = {4, 6, 3, 7, 6};
         unsigned int len = 5;
@@ -44,11 +32,6 @@ void createCorrectTest() {
 
 //проверка обработки ошибки при создании объекта с некоректными параметрами
 void createIncorrectTest() {
-    try {
-        vector<double> vec;
-        Polynomial polynomial(vec);
-        cout << "create incorrect test Failed" << endl;
-    } catch (PolynomialException &e) {}
 
     try {
         double* array = nullptr;
@@ -69,8 +52,9 @@ void createIncorrectTest() {
 
 //проверка вычисления значения функции в заданой точки
 void getValueTest() {
-    vector<double> vec = {2, 5, 7};
-    Polynomial polynomial(vec);
+    double array[] = {2, 5, 7};
+    unsigned int len = 3;
+    Polynomial polynomial(array, len);
 
     if (polynomial.getValue(2) == 40) {
         cout << "get Value test Passed" << endl;
@@ -82,8 +66,9 @@ void getValueTest() {
 //провека получения коофицентов объекта при при никоректных аргументах
 void getIncorrectCoefficientTest() {
     try {
-        vector<double> vec = {2, 5, 7};
-        Polynomial polynomial(vec);
+        double array[] = {2, 5, 7};
+        unsigned int len = 3;
+        Polynomial polynomial(array, len);
         polynomial.getCoefficient(100);
         cout << "get Incorrect Coefficient Test Failed" << endl;
     } catch (PolynomialException &e) {}
@@ -92,8 +77,9 @@ void getIncorrectCoefficientTest() {
 
 //проверка установки коофицентов с коректными аргументами
 void setCorrectCoefficientTest() {
-    vector<double> vec = {2, 5, 7};
-    Polynomial polynomial(vec);
+    double array[] = {2, 5, 7};
+    unsigned int len = 3;
+    Polynomial polynomial(array, len);
     polynomial.setCoefficient(10, 0);
     polynomial.setCoefficient(16, 1);
     polynomial.setCoefficient(17, 2);
@@ -110,8 +96,9 @@ void setCorrectCoefficientTest() {
 
 //проверка установки коофицентов с не коректными аргументами
 void setIncorrectCoefficientTest() {
-    vector<double> vec = {2, 5, 7};
-    Polynomial polynomial(vec);
+    double array[] = {2, 5, 7};
+    unsigned int len = 3;
+    Polynomial polynomial(array, len);
     try {
         polynomial.setCoefficient(10, 200);
         cout << "set Incorrect Coefficient Test Failed" << endl;
@@ -121,10 +108,11 @@ void setIncorrectCoefficientTest() {
 
 //проверка приобразования объекта к строке
 void toStringTest() {
-    vector<double> vec = {2, 5, 7};
-    Polynomial polynomial(vec);
+    double array[] = {2, -5, 7.654};
+    unsigned int len = 3;
+    Polynomial p(array, len);
 
-    if (polynomial.toString() == "2+5x^1+7x^2") {
+    if (strcmp(p.toString(), "2-5x^1+7.654x^2") == 0) {
         cout << "toString Test Passed" << endl;
     } else {
         cout << "toString Test Failed" << endl;

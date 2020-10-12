@@ -15,4 +15,6 @@ void getIncorrectCoefficientTest();
 
 void setCorrectCoefficientTest();
 
+void toStringTest();
+
 #endif //LABS2_TEST_H
