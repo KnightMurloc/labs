@@ -1,0 +1,1 @@
+add_library(lab_lib STATIC Polynomial.cpp Polynomial.h)

@@ -10,6 +10,8 @@
 #include <cstring>
 #include <cmath>
 #include <cctype>
+#include <fstream>
+#include <sys/stat.h>
 
 unsigned int Polynomial::count = 0;
 
@@ -49,7 +51,10 @@ char* Polynomial::toString() const {
     //1 - \0
     auto str = (char*) malloc(37 * getOrder() + 1);
     memset(str, 0, 25 * getOrder() + 1);
-    int i = sprintf(str, "%.20g", getCoefficient(0));
+    int i = 0;
+    if (getCoefficient(0) != 0) {
+        i = sprintf(str, "%.20g", getCoefficient(0));
+    }
     for (unsigned int j = 1; j < getOrder(); j++) {
         if (getCoefficient(j) > 0) {
             i += sprintf(str + i, "+%gx^%d", getCoefficient(j), j);
@@ -130,6 +135,7 @@ const Polynomial Polynomial::operator++(int) {
     Polynomial temp = *this;
     this->order++;
     this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
+    this->coefficients[order - 1] = 0;
     return temp;
 }
 
@@ -163,8 +169,10 @@ Polynomial &Polynomial::operator=(const char* str) {
 
 
         if (order >= size) {
+            unsigned int old_size = size;
             size = order + 1;
             coefficients = (double*) realloc(coefficients, size * sizeof(double));
+            memset(coefficients + old_size, 0, order + 1 - old_size);
         }
         coefficients[order] += coef;
         i += len;
@@ -195,4 +203,111 @@ Polynomial &Polynomial::operator--() {
     this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
     return *this;
 }
+
+std::ostream &operator<<(std::ostream &stream, Polynomial &p) {
+    char* str = p.toString();
+    stream << str;
+    delete str;
+    return stream;
+}
+
+std::istream &operator>>(std::istream &stream, Polynomial &p) {
+    char data[1024];
+    char* str = new char[sizeof(data)];
+    unsigned int size = sizeof(data);
+    bool is_have_zero = false;
+    do {
+        stream.getline(data, sizeof(data));
+        memcpy(str + size - sizeof(data), data, sizeof(data));
+        for (char i : data) {
+            if (i == 0) {
+                is_have_zero = true;
+                break;
+            }
+        }
+
+        if (!is_have_zero) {
+            str = (char*) realloc(str, size += 1024);
+        }
+
+    } while (!is_have_zero);
+
+    p = str;
+    delete[] str;
+
+    return stream;
+}
+
+std::ofstream &operator<<(std::ofstream &stream, Polynomial &p) {
+
+    if (stream.flags() & std::ios::binary) {
+        stream.write((char*) &p.order, sizeof(unsigned int));
+        stream.write((char*) p.coefficients, p.order * sizeof(double));
+    } else {
+        stream << p.toString();
+    }
+
+    return stream;
+}
+
+std::ifstream &operator>>(std::ifstream &stream, Polynomial &p) {
+
+    if (stream.flags() & std::ios::binary) {
+        stream.read((char*) &p.order, sizeof(p.order));
+        p.coefficients = new double[p.order];
+        stream.read((char*) p.coefficients, p.order * sizeof(double));
+    } else {
+        stream.seekg(0, std::ios::end);
+        unsigned int size = (unsigned int) stream.tellg();
+        char* str = new char[size + 1];
+        stream.seekg(0, std::ios::beg);
+        str[size] = 0;
+        stream >> str;
+        p = str;
+        delete[] str;
+    }
+
+    return stream;
+}
+
+//void operator<<(std::stringstream& stream, Polynomial& p) {
+//    char* str = p.toString();
+//    stream << str;
+//    delete [] str;
+//}
+
+//std::ostringstream &operator<<(std::ostringstream &stream, Polynomial &p) {
+//    char* str = p.toString();
+//    stream << str;
+//    delete [] str;
+//
+//    return stream;
+//}
+//
+//std::istringstream &operator<<(std::istringstream &stream, Polynomial &p) {
+//    char data[1024];
+//    char* str = new char[sizeof(data)];
+//    unsigned int size = sizeof(data);
+//    bool is_have_zero = false;
+//    do {
+//        stream.getline(data, sizeof(data));
+//        memcpy(str + size - sizeof(data),data,sizeof(data));
+//        for (char i : data) {
+//            if(i == 0){
+//                is_have_zero = true;
+//                break;
+//            }
+//        }
+//
+//        if(!is_have_zero){
+//            str = (char*) realloc(str, size += 1024);
+//        }
+//
+//    }while(!is_have_zero);
+//
+//    p = str;
+//    delete[] str;
+//
+//    return stream;
+//}
 

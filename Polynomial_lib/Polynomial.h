@@ -6,6 +6,8 @@
 #define LABS2_POLYNOMIAL_H
 
 #include <exception>
+#include <iostream>
+#include <sstream>
 
 class Polynomial {
 public:
@@ -62,6 +64,19 @@ public:
     Polynomial &operator=(const char* str);
 
     static unsigned int getCount() { return count; }
+
+    friend std::ostream &operator<<(std::ostream &stream, Polynomial &p);
+
+    friend std::istream &operator>>(std::istream &stream, Polynomial &p);
+
+    friend std::ofstream &operator<<(std::ofstream &stream, Polynomial &p);
+
+    friend std::ifstream &operator>>(std::ifstream &stream, Polynomial &p);
+
+//    friend std::istringstream&operator<<(std::istringstream& stream,Polynomial& p);
+//    friend std::istringstream&operator>>(std::istringstream& stream,Polynomial& p);
+
+//    friend void operator<<(std::stringstream& stream,Polynomial& p);
 
 private:
     static unsigned int count;
