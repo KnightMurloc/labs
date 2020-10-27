@@ -40,5 +40,20 @@ int main() {
 
 //    REQUIRE(std::string("1+2x^1+3x^2") == p.toString());
 
+    double array[] = {1, 2, 3};
+    unsigned int len = sizeof(array) / sizeof(double);
+    Polynomial p(array, len);
+
+    std::ofstream stream("test3_1.bin", std::ios::binary);
+    stream.flags((ios_base::fmtflags) ios::binary);
+    printf("%d\n", stream.flags());
+    if (stream.flags() & ios::binary) {
+        printf("test\n");
+    }
+
+    stream << p;
+    stream.flush();
+    stream.close();
+
     return 0;
 }

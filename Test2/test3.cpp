@@ -60,3 +60,29 @@ TEST_CASE("Output/InputStreamTest", "[out/in to text file]") {
         REQUIRE(std::string("1+2x^1+3x^2") == p.toString());
     }
 }
+
+TEST_CASE("Output/InputBinaryStreamTest", "[out/in to binary file]") {
+    {
+        double array[] = {1, 2, 3};
+        unsigned int len = sizeof(array) / sizeof(double);
+        Polynomial p(array, len);
+
+        std::ofstream stream("test3_1.bin");
+        stream.flags((std::ios_base::fmtflags) std::ios::binary);
+        stream << p;
+        stream.flush();
+        stream.close();
+    }
+
+    {
+        double array[] = {0};
+        unsigned int len = sizeof(array) / sizeof(double);
+        Polynomial p(array, len);
+
+        std::ifstream stream("test3_1.bin");
+        stream.flags((std::ios_base::fmtflags) std::ios::binary);
+        stream >> p;
+
+        REQUIRE(std::string("1+2x^1+3x^2") == p.toString());
+    }
+}
