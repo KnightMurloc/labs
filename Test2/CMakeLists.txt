@@ -1,9 +1,6 @@
 project(Catch_tests)
 
-#set(CMAKE_CXX_COMPILER "C:\\Program Files\\LLVM\\bin\\clang++.exe")
-
 add_compile_options(-Winvalid-pch)
-#add_compile_options(-H)
 
 include_directories("../Polynomial_lib")
 

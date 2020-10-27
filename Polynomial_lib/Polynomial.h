@@ -11,6 +11,9 @@
 
 class Polynomial {
 public:
+
+    Polynomial();
+
     Polynomial(double* coefficients, unsigned int order);
 
     Polynomial(const Polynomial &p);

@@ -7,53 +7,67 @@
 using namespace std;
 
 int main() {
-//    double array[] = {1,2,5};
-//    unsigned int len = sizeof(array) / sizeof(double);
-//    Polynomial p(array,len);
+//    ifstream stream("1.txt");
+//    {
+//        double array[] = {1,2,3};
+//        unsigned int len = sizeof(array) / sizeof(double);
+//        Polynomial p(array,len);
 //
-//    fstream stream("1.txt");
+//        stream << p;
+//    }
 //
-//    stream >> p;
-//    cout << p.toString() << endl;
-////    stream.flush();
+//    {
+//        double array[] = {3,2,1};
+//        unsigned int len = sizeof(array) / sizeof(double);
+//        Polynomial p(array,len);
+//
+//        stream << p;
+//    }
+//
+//    stream.flush();
 //    stream.close();
-////
-//////    p = "2x^1+3x^2";
-////
-////    stringstream stream("2x^1+3x^2");
-////
-////    stream >> p;
-////
-////    cout << p.toString() << endl;
 
-//    double array[] = {0,2,3};
-//    unsigned int len = sizeof(array) / sizeof(double);
-//    Polynomial p(array, len);
+//    {
+//        Polynomial p;
 //
-//    std::ifstream stream("test3_1.txt");
-//
-//    try {
 //        stream >> p;
-//    }catch(PolynomialException& e){
-//        cout << e.what() << endl;
+//
+//        cout << p << endl;
+//    }
+//
+//    {
+//        Polynomial p;
+//
+//        stream >> p;
+//
+//        cout << p[2] << endl;
 //    }
 
-//    REQUIRE(std::string("1+2x^1+3x^2") == p.toString());
+//    {
+//        Polynomial p;
+//        p = "3+2x^1+1x^2";
+//        cout << p[2] << endl;
+//    }
 
-    double array[] = {1, 2, 3};
-    unsigned int len = sizeof(array) / sizeof(double);
-    Polynomial p(array, len);
+//    stream.close();
 
-    std::ofstream stream("test3_1.bin", std::ios::binary);
-    stream.flags((ios_base::fmtflags) ios::binary);
-    printf("%d\n", stream.flags());
-    if (stream.flags() & ios::binary) {
-        printf("test\n");
+    stringstream stream("1+2x^1+3x^2 3+2x^1+1x^2");
+
+    {
+        Polynomial p;
+
+        stream >> p;
+
+        cout << p << endl;
     }
 
-    stream << p;
-    stream.flush();
-    stream.close();
+    {
+        Polynomial p;
+
+        stream >> p;
+
+        cout << p << endl;
+    }
 
     return 0;
 }

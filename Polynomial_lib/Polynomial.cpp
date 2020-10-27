@@ -69,6 +69,7 @@ char* Polynomial::toString() const {
 
 
 double Polynomial::getCoefficient(unsigned int order) const {
+
     if (order >= this->order) {
         throw PolynomialException("Out of Range Array");
     }
@@ -77,6 +78,7 @@ double Polynomial::getCoefficient(unsigned int order) const {
 
 
 void Polynomial::setCoefficient(double coefficient, unsigned int order) {
+
     if (order >= this->order) {
         throw PolynomialException("Out of Range Array");
     }
@@ -155,6 +157,7 @@ Polynomial &Polynomial::operator=(const char* str) {
     memset(coefficients, 0, this->order * sizeof(double));
     unsigned int size = this->order;
     for (int i = 0; i < strlen(str);) {
+
         double coef;
         unsigned int order;
         int len;
@@ -172,7 +175,8 @@ Polynomial &Polynomial::operator=(const char* str) {
             unsigned int old_size = size;
             size = order + 1;
             coefficients = (double*) realloc(coefficients, size * sizeof(double));
-            memset(coefficients + old_size, 0, order + 1 - old_size);
+            memset(coefficients + old_size, 0, order - old_size + 1);
+            coefficients[order] = 0;
         }
         coefficients[order] += coef;
         i += len;
@@ -212,26 +216,20 @@ std::ostream &operator<<(std::ostream &stream, Polynomial &p) {
 }
 
 std::istream &operator>>(std::istream &stream, Polynomial &p) {
-    char data[1024];
-    char* str = new char[sizeof(data)];
-    unsigned int size = sizeof(data);
-    bool is_have_zero = false;
-    do {
-        stream.getline(data, sizeof(data));
-        memcpy(str + size - sizeof(data), data, sizeof(data));
-        for (char i : data) {
-            if (i == 0) {
-                is_have_zero = true;
-                break;
-            }
+    char* str = new char[1024];
+    unsigned int size = 1024;
+    unsigned int i = 0;
+    char c = stream.get();
+    while (c != ' ' && c != -1) {
+        if (i >= size) {
+            size += 1024;
+            str = (char*) realloc(str, size);
         }
-
-        if (!is_have_zero) {
-            str = (char*) realloc(str, size += 1024);
+        str[i++] = c;
+        if (!stream.eof()) {
+            c = stream.get();
         }
-
-    } while (!is_have_zero);
-
+    }
     p = str;
     delete[] str;
 
@@ -244,7 +242,7 @@ std::ofstream &operator<<(std::ofstream &stream, Polynomial &p) {
         stream.write((char*) &p.order, sizeof(unsigned int));
         stream.write((char*) p.coefficients, p.order * sizeof(double));
     } else {
-        stream << p.toString();
+        stream << p.toString() << " ";
     }
 
     return stream;
@@ -257,17 +255,30 @@ std::ifstream &operator>>(std::ifstream &stream, Polynomial &p) {
         p.coefficients = new double[p.order];
         stream.read((char*) p.coefficients, p.order * sizeof(double));
     } else {
-        stream.seekg(0, std::ios::end);
-        unsigned int size = (unsigned int) stream.tellg();
+        unsigned int size = 0;
+        unsigned int pos = stream.tellg();
+        while (!stream.eof()) {
+            if (stream.get() == ' ') {
+                break;
+            }
+            size++;
+        }
+        stream.seekg(pos, std::ios::beg);
         char* str = new char[size + 1];
-        stream.seekg(0, std::ios::beg);
         str[size] = 0;
         stream >> str;
+        stream.get();
         p = str;
         delete[] str;
     }
 
     return stream;
+}
+
+Polynomial::Polynomial() {
+    coefficients = new double(0);
+    order = 1;
+    count++;
 }
 
 //void operator<<(std::stringstream& stream, Polynomial& p) {
