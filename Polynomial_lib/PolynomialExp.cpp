@@ -172,7 +172,7 @@ void PolynomialExp::setFromString(const char* str) {
     this->order = size;
 }
 
-int PolynomialExp::GetExp(unsigned int idx) {
+int PolynomialExp::getExp(unsigned int idx) {
     if(idx >= order){
         throw PolynomialException("Out of Range Array");
     }
@@ -183,4 +183,125 @@ int PolynomialExp::GetExp(unsigned int idx) {
 PolynomialExp &PolynomialExp::operator=(const char* str) {
     setFromString(str);
     return *this;
+}
+
+Polynomial operator+(Polynomial &p1, PolynomialExp& p2) {
+    unsigned int order = std::max(p2.order, p2.order);
+    Polynomial polynomial(order);
+    memset(polynomial.getCoefficients(),0,polynomial.getOrder() * sizeof(double));
+    memcpy(polynomial.getCoefficients(), p1.getCoefficients(), p1.getOrder() * sizeof(double));
+    for (unsigned int i = 0; i < p1.getOrder(); ++i) {
+        polynomial.getCoefficients()[i] += pow(p2.coefficients[i], p2.getExp(i));
+    }
+    if (p2.order > p1.getOrder()) {
+        for (unsigned int i = 0; i < p2.order - p1.getOrder(); ++i) {
+            polynomial.getCoefficients()[p1.getOrder() + i] += pow(p2.coefficients[p1.getOrder() + i],
+                                                                   p2.getExp(i));
+        }
+    }
+    return std::move(polynomial);
+}
+
+Polynomial operator+(PolynomialExp &p1, PolynomialExp &p2) {
+    unsigned int order = std::max(p2.order, p2.order);
+    Polynomial polynomial(order);
+    memset(polynomial.getCoefficients(),0,polynomial.getOrder() * sizeof(double));
+    for (int i = 0; i < p1.getOrder(); ++i) {
+        polynomial.setCoefficient(pow(p1[i],p1.getExp(i)),i);
+    }
+    for (unsigned int i = 0; i < p1.order; ++i) {
+        polynomial.getCoefficients()[i] += pow(p2[i],p2.getExp(i));
+    }
+    if (p2.order > p1.order) {
+        for (unsigned int i = 0; i < p2.order - p1.order; ++i) {
+            polynomial.getCoefficients()[p1.order + i] +=
+                    pow(p2[p1.order + i],p2.getExp(p1.order + i));
+        }
+    }
+    return std::move(polynomial);
+}
+
+Polynomial operator+(PolynomialExp &p1, Polynomial &p2) {
+    unsigned int order = std::max(p2.getOrder(), p2.getOrder());
+    Polynomial polynomial(order);
+    memset(polynomial.getCoefficients(),0,polynomial.getOrder() * sizeof(double));
+    for (int i = 0; i < p1.getOrder(); ++i) {
+        polynomial.setCoefficient(pow(p1[i],p1.getExp(i)),i);
+    }
+    for (unsigned int i = 0; i < p1.order; ++i) {
+        polynomial.getCoefficients()[i] += p2[i];
+    }
+    if (p2.getOrder() > p1.order) {
+        for (unsigned int i = 0; i < p2.getOrder() - p1.order; ++i) {
+            polynomial.getCoefficients()[p1.order + i] += p2[p1.order + i];
+        }
+    }
+    return std::move(polynomial);
+}
+
+Polynomial operator-(Polynomial &p1, PolynomialExp& p2) {
+    unsigned int order = std::max(p2.order, p2.order);
+    Polynomial polynomial(order);
+    memset(polynomial.getCoefficients(),0,polynomial.getOrder() * sizeof(double));
+    memcpy(polynomial.getCoefficients(), p1.getCoefficients(), p1.getOrder() * sizeof(double));
+    for (unsigned int i = 0; i < p1.getOrder(); ++i) {
+        polynomial.getCoefficients()[i] -= pow(p2.coefficients[i], p2.getExp(i));
+    }
+    if (p2.order > p1.getOrder()) {
+        for (unsigned int i = 0; i < p2.order - p1.getOrder(); ++i) {
+            polynomial.getCoefficients()[p1.getOrder() + i] -= pow(p2.coefficients[p1.getOrder() + i],
+                                                                   p2.getExp(i));
+        }
+    }
+    return std::move(polynomial);
+}
+
+Polynomial operator-(PolynomialExp &p1, PolynomialExp &p2) {
+    unsigned int order = std::max(p2.order, p2.order);
+    Polynomial polynomial(order);
+    memset(polynomial.getCoefficients(),0,polynomial.getOrder() * sizeof(double));
+    for (int i = 0; i < p1.getOrder(); ++i) {
+        polynomial.setCoefficient(pow(p1[i],p1.getExp(i)),i);
+    }
+    for (unsigned int i = 0; i < p1.order; ++i) {
+        polynomial.getCoefficients()[i] -= pow(p2[i],p2.getExp(i));
+    }
+    if (p2.order > p1.order) {
+        for (unsigned int i = 0; i < p2.order - p1.order; ++i) {
+            polynomial.getCoefficients()[p1.order + i] -=
+                    pow(p2[p1.order + i],p2.getExp(p1.order + i));
+        }
+    }
+    return std::move(polynomial);
+}
+
+Polynomial operator-(PolynomialExp &p1, Polynomial &p2) {
+    unsigned int order = std::max(p2.getOrder(), p2.getOrder());
+    Polynomial polynomial(order);
+    memset(polynomial.getCoefficients(),0,polynomial.getOrder() * sizeof(double));
+    for (int i = 0; i < p1.getOrder(); ++i) {
+        polynomial.setCoefficient(pow(p1[i],p1.getExp(i)),i);
+    }
+    for (unsigned int i = 0; i < p1.order; ++i) {
+        polynomial.getCoefficients()[i] -= p2[i];
+    }
+    if (p2.getOrder() > p1.order) {
+        for (unsigned int i = 0; i < p2.getOrder() - p1.order; ++i) {
+            polynomial.getCoefficients()[p1.order + i] -= p2[p1.order + i];
+        }
+    }
+    return std::move(polynomial);
+}
+
+PolynomialExp::operator Polynomial() const {
+    auto* coef = new double[order];
+    for (int i = 0; i < order; ++i) {
+        coef[i] = pow(coefficients[i],coefExp[i]);
+    }
+
+    Polynomial p = Polynomial(coef,order);
+
+    delete[] coef;
+    printf("test\n");
+    return std::move(p);
 }

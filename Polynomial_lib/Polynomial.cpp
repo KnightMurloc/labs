@@ -265,7 +265,6 @@ Polynomial operator+(Polynomial &p1, Polynomial &p2) {
     memset(polynomial.coefficients,0,polynomial.order * sizeof(double));
     memcpy(polynomial.coefficients, p1.coefficients, p1.order * sizeof(double));
     for (unsigned int i = 0; i < p1.order; ++i) {
-//        printf("%lf\n",polynomial.coefficients[i] + p2.coefficients[i]);
         polynomial.coefficients[i] += p2.coefficients[i];
     }
     if (p2.order > p1.order) {
@@ -292,6 +291,10 @@ Polynomial operator-(Polynomial &p1, Polynomial &p2) {
         }
     }
     return std::move(polynomial);
+}
+
+double* Polynomial::getCoefficients() {
+    return coefficients;
 }
 
 //void operator<<(std::stringstream& stream, Polynomial& p) {

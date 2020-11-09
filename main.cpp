@@ -13,11 +13,10 @@ int main() {
     int exp[] = {1,2,3};
     unsigned int len = 3;
     PolynomialExp p(coef,exp,len);
+    PolynomialExp p2(coef,exp,len);
 
-//    char* str = p.toString();
-    p = "1+2^2x^1+3^3x^2";
 
-    cout << p << endl;
+    cout << *p3 << endl;
 
     return 0;
 }

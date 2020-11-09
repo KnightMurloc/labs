@@ -12,34 +12,41 @@ public:
     PolynomialExp(double* coefficients, unsigned int order);
     PolynomialExp(double* coefficients,int* exps, unsigned int order);
 
-    PolynomialExp(const Polynomial &p);
+    explicit PolynomialExp(const Polynomial &p);
 
-    double getValue(double x) const override;
+    [[nodiscard]] double getValue(double x) const override;
 
-    PolynomialExp &operator++();
+    PolynomialExp &operator++() override;
 
-    const PolynomialExp operator++(int i);
+    const PolynomialExp operator++(int);
 
-    PolynomialExp &operator=(const char* str);
+    PolynomialExp &operator=(const char* str) override;
 
-    PolynomialExp &operator--();
+    PolynomialExp &operator--() override;
 
-    int GetExp(unsigned int idx);
-
-protected:
-    void setFromString(const char* str) override;
-
-public:
+    int getExp(unsigned int idx);
 
     const PolynomialExp operator--(int i);
 
-    char* toString() const override;
+    [[nodiscard]] char* toString() const override;
 
     ~PolynomialExp() override;
 
     PolynomialExp();
 
-    PolynomialExp(Polynomial &&other);
+    friend Polynomial operator+(Polynomial& p1,PolynomialExp& p2);
+    friend Polynomial operator+(PolynomialExp& p1,PolynomialExp& p2);
+    friend Polynomial operator+(PolynomialExp& p1,Polynomial& p2);
+
+    friend Polynomial operator-(Polynomial& p1,PolynomialExp& p2);
+    friend Polynomial operator-(PolynomialExp& p1,PolynomialExp& p2);
+    friend Polynomial operator-(PolynomialExp& p1,Polynomial& p2);
+
+    explicit PolynomialExp(Polynomial &&other);
+
+    explicit operator Polynomial() const;
+protected:
+    void setFromString(const char* str) override;
 
 private:
     int* coefExp;

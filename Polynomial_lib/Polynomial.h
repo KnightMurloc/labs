@@ -56,11 +56,11 @@ public:
 
     virtual double operator()(double x);
 
-    Polynomial &operator++();
+    virtual Polynomial &operator++();
 
     const Polynomial operator++(int);
 
-    Polynomial &operator--();
+    virtual Polynomial &operator--();
 
     const Polynomial operator--(int);
 
@@ -78,14 +78,17 @@ public:
 
     friend std::ifstream &operator>>(std::ifstream &stream, Polynomial &p);
 
+    explicit Polynomial(unsigned int order);
+
+    double* getCoefficients();
 protected:
     virtual void setFromString(const char* str);
     static unsigned int count;
     double* coefficients;
 
-    explicit Polynomial(unsigned int order);
-
     unsigned int order;
+
+
 };
 
 //CopyPaste from stackoverflow
