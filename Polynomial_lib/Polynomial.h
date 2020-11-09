@@ -20,16 +20,16 @@ public:
 
     Polynomial(Polynomial &&other) noexcept;
 
-    ~Polynomial();
+    virtual ~Polynomial();
 
-    //double Polynomial::getValue(double x)
+    virtual //double Polynomial::getValue(double x)
     //вычилсяет значение функции в точке x
     //arcs:
     // - int x - точка на прямой
     //return - занчение в точке
     double getValue(double x) const;
 
-    unsigned int getOrder() const { return order; };
+    [[nodiscard]] unsigned int getOrder() const { return order; };
 
     //double Polynomial::getCoefficient(int order)
     //возвращаяет коофицкнт определёного порядка
@@ -38,33 +38,35 @@ public:
     //return - коофицент
     double getCoefficient(unsigned int order) const;
 
-    //void Polynomial::setCoefficient(double coefficient, int order)
+    virtual //void Polynomial::setCoefficient(double coefficient, int order)
     //задаёт коофицент лпределёного порядка
     //args:
     // - double coefficient - значение коофицента
     // - unsigned int order - порядок коофицента
     void setCoefficient(double coefficient, unsigned int order);
 
-    //char* Polynomial::toString()
+     //char* Polynomial::toString()
     //приобразует объект к строке
     //return - строка
-    char* toString() const;
+    [[nodiscard]] virtual char* toString() const;
 
-    Polynomial operator+(Polynomial &p);
+    friend Polynomial operator+(Polynomial &p1,Polynomial &p2);
 
-    Polynomial operator-(Polynomial &p);
+    friend Polynomial operator-(Polynomial &p1,Polynomial &p2);
 
-    double operator()(double x);
+    virtual double operator()(double x);
 
     Polynomial &operator++();
+
     const Polynomial operator++(int);
 
     Polynomial &operator--();
+
     const Polynomial operator--(int);
 
     double operator[](unsigned int i);
 
-    Polynomial &operator=(const char* str);
+    virtual Polynomial &operator=(const char* str);
 
     static unsigned int getCount() { return count; }
 
@@ -76,17 +78,14 @@ public:
 
     friend std::ifstream &operator>>(std::ifstream &stream, Polynomial &p);
 
-//    friend std::istringstream&operator<<(std::istringstream& stream,Polynomial& p);
-//    friend std::istringstream&operator>>(std::istringstream& stream,Polynomial& p);
-
-//    friend void operator<<(std::stringstream& stream,Polynomial& p);
-
-private:
+protected:
+    virtual void setFromString(const char* str);
     static unsigned int count;
     double* coefficients;
-    unsigned int order;
 
     explicit Polynomial(unsigned int order);
+
+    unsigned int order;
 };
 
 //CopyPaste from stackoverflow
@@ -97,7 +96,7 @@ public:
 
     ~PolynomialException() noexcept override = default;
 
-    const char* what() const noexcept override {
+    [[nodiscard]] const char* what() const noexcept override {
         return msg_;
     }
 

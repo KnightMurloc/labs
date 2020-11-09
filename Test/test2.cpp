@@ -216,16 +216,20 @@ TEST(PolynomialTestOperator, assignmentCorrectTest) {
     unsigned int len = 3;
     Polynomial p(array, len);
     p = "1+2x^1+3x^5";
-    std::cout << p.toString() << std::endl;
+    for (int i = 0; i < p.getOrder(); ++i) {
+        printf("%lf ",p[i]);
+    }
+    printf("\n");
     ASSERT_EQ(p[0], 1);
     ASSERT_EQ(p[1], 2);
     ASSERT_EQ(p[2], 0);
     ASSERT_EQ(p[3], 0);
+    ASSERT_EQ(p[4], 0);
     ASSERT_EQ(p[5], 3);
 
 }
 
 int main() {
-
+    testing::InitGoogleTest();
     return RUN_ALL_TESTS();
 }

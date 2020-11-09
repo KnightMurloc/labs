@@ -1,1 +1,1 @@
-add_library(lab_lib STATIC Polynomial.cpp Polynomial.h)
+add_library(lab_lib STATIC Polynomial.cpp Polynomial.h PolynomialString.cpp PolynomialString.h PolynomialExp.cpp PolynomialExp.h)
