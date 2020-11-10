@@ -21,10 +21,10 @@ PolynomialExp::PolynomialExp(double* coefficients, int* exps, unsigned int order
     memcpy(this->coefExp, exps, order * sizeof(int));
 }
 
-PolynomialExp::PolynomialExp(const Polynomial &p) : Polynomial(p) {
-    coefExp = new int[order];
-    memset(coefExp,1,order * sizeof(int));
-}
+//PolynomialExp::PolynomialExp(const Polynomial &p) : Polynomial(p) {
+//    coefExp = new int[order];
+//    memset(coefExp,1,order * sizeof(int));
+//}
 
 PolynomialExp::PolynomialExp(Polynomial &&other) : Polynomial(other) {
     coefExp = new int[order];
@@ -47,7 +47,6 @@ char* PolynomialExp::toString() const {
     //10 - максимальная длина uint
     //3 - +-x^
     //1 - \0
-    printf("test\n");
     auto str = (char*) malloc(49 * getOrder() + 1);
     memset(str, 0, 49 * getOrder() + 1);
     int i = 0;
@@ -89,10 +88,11 @@ PolynomialExp &PolynomialExp::operator++() {
     this->order++;
     this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
     this->coefExp = (int*) realloc(this->coefExp,this->order * sizeof(int));
+    this->coefExp[order - 1] = 1;
     return *this;
 }
 
-const PolynomialExp PolynomialExp::operator++(int i) {
+const PolynomialExp PolynomialExp::operator++(int) {
     PolynomialExp temp = *this;
     this->order++;
     this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
@@ -150,16 +150,12 @@ void PolynomialExp::setFromString(const char* str) {
             size = order + 1;
             coefficients = (double*) realloc(coefficients, size * sizeof(double));
             coefExp = (int*) realloc(coefExp, size * sizeof(int));
-//            memset(coefficients + old_size, 0, order - old_size - 1);
-//            memset(coefficients + old_size,0,size - old_size + 1);
             for (int j = old_size; j <= size - old_size + 1; ++j) {
-//                printf("%lf\n",coefficients[j]);
                 coefficients[j] = 0;
                 coefExp[j] = 1;
             }
             coefficients[order] = 0;
         }
-//        printf("%lf\n",coefficients[order]);
         coefficients[order] += coef;
         coefExp[order] = exp;
         i += len;
@@ -173,10 +169,9 @@ void PolynomialExp::setFromString(const char* str) {
 }
 
 int PolynomialExp::getExp(unsigned int idx) {
-    if(idx >= order){
+    if (idx >= this->order) {
         throw PolynomialException("Out of Range Array");
     }
-
     return coefExp[idx];
 }
 
@@ -302,6 +297,19 @@ PolynomialExp::operator Polynomial() const {
     Polynomial p = Polynomial(coef,order);
 
     delete[] coef;
-    printf("test\n");
     return std::move(p);
+}
+
+double PolynomialExp::operator()(double x) {
+    return getValue(x);
+}
+
+PolynomialExp::PolynomialExp(const PolynomialExp &p) {
+    this->order = p.order;
+    this->coefficients = new double[order];
+    this->coefExp = new int[order];
+
+    memcpy(this->coefficients,p.coefficients,order * sizeof(double));
+    memcpy(this->coefExp,p.coefExp,order * sizeof(int));
+    count++;
 }

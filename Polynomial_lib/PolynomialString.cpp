@@ -7,6 +7,8 @@
 
 
 PolynomialString::PolynomialString(const char* str) {
+//    this->coefficients = nullptr;
+    this->order = 1;
     this->str = strdup(str);
     setFromString(str);
 }
@@ -38,6 +40,7 @@ const PolynomialString PolynomialString::operator++(int) {
     this->coefficients = (double*) realloc(this->coefficients, this->order * sizeof(double));
     this->coefficients[order - 1] = 0;
     this->str = Polynomial::toString();
+
     return temp;
 }
 
@@ -67,13 +70,13 @@ PolynomialString::PolynomialString(const Polynomial &p) : Polynomial(p) {
 }
 
 PolynomialString::~PolynomialString() {
-    delete [] coefficients;
     delete [] str;
 }
 
 PolynomialString::PolynomialString(const PolynomialString &p) {
+    this->order = p.order;
     this->coefficients = new double[order];
     memcpy(this->coefficients, p.coefficients, order * sizeof(double));
-    this->str = strdup(p.str);
+    this->str = Polynomial::toString();
     count++;
 }

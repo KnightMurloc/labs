@@ -68,12 +68,12 @@ char* Polynomial::toString() const {
 }
 
 
-double Polynomial::getCoefficient(unsigned int order) const {
+double Polynomial::getCoefficient(unsigned int idx) const {
 
-    if (order >= this->order) {
+    if (idx >= this->order) {
         throw PolynomialException("Out of Range Array");
     }
-    return coefficients[order];
+    return coefficients[idx];
 }
 
 
@@ -239,11 +239,11 @@ void Polynomial::setFromString(const char* str) {
 
         if (order >= size) {
             unsigned int old_size = size;
-            size = order + 1;
+            size = order + 2;
             coefficients = (double*) realloc(coefficients, size * sizeof(double));
 //            memset(coefficients + old_size, 0, order - old_size - 1);
 //            memset(coefficients + old_size,0,size - old_size + 1);
-            for (int j = old_size; j <= size - old_size + 1; ++j) {
+            for (unsigned int j = old_size; j < size; ++j) {
 //                printf("%lf\n",coefficients[j]);
                 coefficients[j] = 0;
             }

@@ -9,14 +9,15 @@
 using namespace std;
 
 int main() {
-    double coef[] = {1,2,3};
-    int exp[] = {1,2,3};
-    unsigned int len = 3;
-    PolynomialExp p(coef,exp,len);
-    PolynomialExp p2(coef,exp,len);
+//    double arr[] = {1,2,3};
+//    int len = 3;
+//    Polynomial p(arr,len);
+//    p = "1+2x^1+3x^2";
+//    PolynomialString p = "1+2x^1+3x^2";
+//    PolynomialString p2 = p++;
+//    PolynomialExp p1;
+//    PolynomialExp p2(p1);
 
-
-    cout << *p3 << endl;
-
+//    printf("%lf\n",p2[2]);
     return 0;
 }
