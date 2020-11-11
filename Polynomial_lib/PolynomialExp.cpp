@@ -175,6 +175,15 @@ int PolynomialExp::getExp(unsigned int idx) {
     return coefExp[idx];
 }
 
+
+void PolynomialExp::setExp(int data, unsigned int idx) {
+    if (idx >= this->order) {
+        throw PolynomialException("Out of Range Array");
+    }
+
+    coefExp[idx] = data;
+}
+
 PolynomialExp &PolynomialExp::operator=(const char* str) {
     setFromString(str);
     return *this;

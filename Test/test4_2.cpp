@@ -34,6 +34,21 @@ TEST(PolynomialExpTest,GetValueTest){
     ASSERT_EQ(p(1),32);
 }
 
+TEST(PolynomialExpTest,SetTest){
+    double arr[] = {1,2,3};
+    int exps[] = {1,2,3};
+    unsigned int len = 3;
+    PolynomialExp p(arr,exps,len);
+    
+    p.setExp(0,0);
+    p.setExp(1,1);
+    p.setExp(2,2);
+    
+    ASSERT_EQ(p.getExp(0),0);
+    ASSERT_EQ(p.getExp(1),1);
+    ASSERT_EQ(p.getExp(2),2);
+}
+
 TEST(PolynomialExpTest, IncDecTest){
     {
         double arr[] = {1,2,3};

@@ -26,6 +26,7 @@ public:
     PolynomialExp &operator--() override;
 
     int getExp(unsigned int idx);
+    void setExp(int data, unsigned int idx);
 
     double operator()(double x) override;
 
