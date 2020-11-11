@@ -8,6 +8,7 @@
 
 class PolynomialExpTest : public testing::Test {};
 
+//тестирование коректности создания экземпляра класса
 TEST(PolynomialExpTest, CreatePolynomialExp){
     double arr[] = {1,2,3};
     int exps[] = {1,2,3};
@@ -25,6 +26,7 @@ TEST(PolynomialExpTest, CreatePolynomialExp){
     ASSERT_EQ(p.toString(),std::string("1+2^2x^1+3^3x^2"));
 }
 
+//тестирование коректности вычисления значения в точке
 TEST(PolynomialExpTest,GetValueTest){
     double arr[] = {1,2,3};
     int exps[] = {1,2,3};
@@ -34,6 +36,7 @@ TEST(PolynomialExpTest,GetValueTest){
     ASSERT_EQ(p(1),32);
 }
 
+//тестирование присвоения
 TEST(PolynomialExpTest,SetTest){
     double arr[] = {1,2,3};
     int exps[] = {1,2,3};
@@ -49,6 +52,7 @@ TEST(PolynomialExpTest,SetTest){
     ASSERT_EQ(p.getExp(2),2);
 }
 
+//тестирование перегрузки инкремента/декремента
 TEST(PolynomialExpTest, IncDecTest){
     {
         double arr[] = {1,2,3};
@@ -162,6 +166,7 @@ TEST(PolynomialExpTest, IncDecTest){
     }
 }
 
+//тестирование перегрузки слождения/вычитания
 TEST(PolynomialExpTest,PlusMinuxTest){
     {
         double arr[] = {1,2,3};

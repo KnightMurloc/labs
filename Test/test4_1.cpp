@@ -7,6 +7,7 @@
 
 class PolynomialStringTest : public testing::Test{};
 
+//тестирование коректности создания экземпляра класса
 TEST(PolynomialStringTest,CreateTest){
     PolynomialString p = "1+2x^1+4x^5";
     ASSERT_EQ(p.toString(),std::string("1+2x^1+4x^5"));
@@ -19,6 +20,7 @@ TEST(PolynomialStringTest,CreateTest){
     ASSERT_EQ(p[5],4);
 }
 
+//тестирование коректности создания экземпляра класса
 TEST(PolynomialStringTest,CreateTest2){
     double arr[] = {1,2,3};
     unsigned int len = 3;
@@ -31,6 +33,7 @@ TEST(PolynomialStringTest,CreateTest2){
     ASSERT_EQ(p[2],3);
 }
 
+//тестирование перегрузки инкремента/декремента
 TEST(PolynomialStringTest,IncDecTest){
     {
         PolynomialString p = "1+2x^1+3x^2";
@@ -101,6 +104,7 @@ TEST(PolynomialStringTest,IncDecTest){
     }
 }
 
+//тестирование присвоения
 TEST(PolynomialStringTest,SetTest){
     PolynomialString p = "1+2x^1+4x^2";
     p.setCoefficient(5,1);

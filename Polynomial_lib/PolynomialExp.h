@@ -12,7 +12,6 @@ public:
     PolynomialExp(double* coefficients, unsigned int order);
     PolynomialExp(double* coefficients,int* exps, unsigned int order);
 
-//    explicit PolynomialExp(const Polynomial &p);
     PolynomialExp(const PolynomialExp &p);
 
     [[nodiscard]] double getValue(double x) const override;
@@ -25,7 +24,15 @@ public:
 
     PolynomialExp &operator--() override;
 
+    //возвращяет значение степени коэфицента
+    //arcs:
+    // - unsigned int idx - номер коэфицента
+    //return - значение степени
     int getExp(unsigned int idx);
+    //задаёт значение степени коэфицента
+    //arcs:
+    // - int data - занчение степени
+    // - unsigned int idx - номер коэфицента
     void setExp(int data, unsigned int idx);
 
     double operator()(double x) override;

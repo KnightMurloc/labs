@@ -7,7 +7,6 @@
 
 
 PolynomialString::PolynomialString(const char* str) {
-//    this->coefficients = nullptr;
     this->order = 1;
     this->str = strdup(str);
     setFromString(str);

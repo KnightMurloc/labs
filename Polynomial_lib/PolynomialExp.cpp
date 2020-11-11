@@ -71,7 +71,6 @@ char* PolynomialExp::toString() const {
             }
         }
     }
-//    str = (char*) realloc(str, (size_t) i + 1);
 
     return str;
 }
@@ -128,7 +127,6 @@ void PolynomialExp::setFromString(const char* str) {
         int exp = 1;
         unsigned int order;
         int len;
-//        int err = sscanf(str + i, "%lgx^%u%n", &coef, &order, &len);
         int err = sscanf(str + i, "%lg^%dx^%u%n", &coef,&exp, &order, &len);
         if (err != 3) {
             err = sscanf(str + i, "%lgx^%u%n", &coef, &order, &len);

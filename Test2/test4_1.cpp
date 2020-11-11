@@ -9,6 +9,7 @@
 #include "PolynomialString.h"
 #include <sstream>
 
+//тестирование коректности создания экземпляра класса
 TEST_CASE("Create Test","[CreateTest]"){
     PolynomialString p = "1+2x^1+4x^5";
     REQUIRE(p.toString() == std::string("1+2x^1+4x^5"));
@@ -21,6 +22,7 @@ TEST_CASE("Create Test","[CreateTest]"){
     REQUIRE(p[5] == 4);
 }
 
+//тестирование коректности создания экземпляра класса
 TEST_CASE("CreateTest2","[CreateTest2]"){
     double arr[] = {1,2,3};
     unsigned int len = 3;
@@ -33,6 +35,7 @@ TEST_CASE("CreateTest2","[CreateTest2]"){
     REQUIRE(p[2] == 3);
 }
 
+//тестирование перегрузки инкремента/декремента
 TEST_CASE("IncDecTest","[IncDecTest]"){
     {
         PolynomialString p = "1+2x^1+3x^2";
@@ -103,6 +106,7 @@ TEST_CASE("IncDecTest","[IncDecTest]"){
     }
 }
 
+//тестирование присвоения
 TEST_CASE("SetTest","[SetTest]"){
     PolynomialString p = "1+2x^1+4x^2";
     p.setCoefficient(5,1);

@@ -7,6 +7,7 @@
 #include "PolynomialExp.h"
 #include <sstream>
 
+//тестирование коректности создания экземпляра класса
 TEST_CASE("Create Polynomial Exp","[CreatePolynomialExp]"){
     double arr[] = {1,2,3};
     int exps[] = {1,2,3};
@@ -24,6 +25,7 @@ TEST_CASE("Create Polynomial Exp","[CreatePolynomialExp]"){
     REQUIRE(p.toString() == std::string("1+2^2x^1+3^3x^2"));
 }
 
+//тестирование коректности вычисления значения в точке
 TEST_CASE("Get Value Test","[GetValueTest]"){
     double arr[] = {1,2,3};
     int exps[] = {1,2,3};
@@ -33,6 +35,7 @@ TEST_CASE("Get Value Test","[GetValueTest]"){
     REQUIRE(p(1) == 32);
 }
 
+//тестирование присвоения
 TEST_CASE("Inc/Dec Test", "[IncDecTest]"){
     {
         double arr[] = {1,2,3};
@@ -146,6 +149,7 @@ TEST_CASE("Inc/Dec Test", "[IncDecTest]"){
     }
 }
 
+//тестирование перегрузки слождения/вычитания
 TEST_CASE("Plus Minux Test","[PlusMinuxTest]"){
     {
         double arr[] = {1,2,3};
