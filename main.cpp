@@ -1,6 +1,5 @@
 #include "Polynomial.h"
-#include "PolynomialString.h"
-#include "PolynomialExp.h"
+#include "PolynomialQueue.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -9,15 +8,24 @@
 using namespace std;
 
 int main() {
-//    double arr[] = {1,2,3};
-//    int len = 3;
-//    Polynomial p(arr,len);
-//    p = "1+2x^1+3x^2";
-//    PolynomialString p = "1+2x^1+3x^2";
-//    PolynomialString p2 = p++;
-//    PolynomialExp p1;
-//    PolynomialExp p2(p1);
 
-//    printf("%lf\n",p2[2]);
+    PolynomialQueue queue;
+    double arr[] = {1,2,3};
+    unsigned int len = sizeof(arr) / sizeof(double);
+    auto* p1 = new Polynomial(arr,len);
+    auto* p2 = new Polynomial(arr,len);
+    auto* p3 = new Polynomial(arr,len);
+    p2->setCoefficient(5,0);
+    p3->setCoefficient(10,0);
+    queue.push(p1);
+    queue.push(p2);
+    queue.insert(p3,1);
+
+
+//    queue.remove(2);
+//    Polynomial* p = queue.pop();
+//    cout << p1 << "\n" << p2 << endl;
+    cout << queue << endl;
+
     return 0;
 }
