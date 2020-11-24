@@ -21,6 +21,9 @@ private:
 
 public:
     Node* frist;
+
+    Polynomial* get(unsigned int idx) override;
+
     Node* last;
     PolynomialQueue();
     ~PolynomialQueue();

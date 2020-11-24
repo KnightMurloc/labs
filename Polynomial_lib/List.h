@@ -12,6 +12,7 @@ public:
     virtual T* pop() = 0;
     virtual void remove(unsigned int idx) = 0;
     virtual void insert(T* p, unsigned int idx) = 0;
+    virtual T* get(unsigned int idx) = 0;
 };
 
 

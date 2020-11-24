@@ -41,6 +41,9 @@ void PolynomialQueue::push(Polynomial* polynomial) {
 }
 
 Polynomial* PolynomialQueue::pop() {
+    if(last->data == nullptr){
+        throw PolynomialQueueException("Out of Range Array");
+    }
     Polynomial* result = last->data;
     Node* temp = last;
     last = temp->prev;
@@ -99,4 +102,16 @@ void PolynomialQueue::remove(unsigned int idx) {
 
     delete current->data;
     delete current;
+}
+
+Polynomial* PolynomialQueue::get(unsigned int idx) {
+    Node* current = frist->next;
+    for (int i = 0; i < idx & current != frist; ++i) {
+        current = current->next;
+    }
+    if(current == frist){
+        throw PolynomialQueueException("Out of Range Array");
+    }
+
+    return current->data;
 }
