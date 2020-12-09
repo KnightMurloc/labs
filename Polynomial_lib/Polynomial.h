@@ -64,9 +64,10 @@ public:
 
     const Polynomial operator--(int);
 
-    double operator[](unsigned int i);
+    double operator[](unsigned int i) const;
 
     virtual Polynomial &operator=(const char* str);
+    Polynomial& operator=(const Polynomial& p);
 
     static unsigned int getCount() { return count; }
 
@@ -77,6 +78,8 @@ public:
     friend std::ofstream &operator<<(std::ofstream &stream, Polynomial &p);
 
     friend std::ifstream &operator>>(std::ifstream &stream, Polynomial &p);
+
+    friend bool operator==(const Polynomial p1,const Polynomial p2);
 
     explicit Polynomial(unsigned int order);
 

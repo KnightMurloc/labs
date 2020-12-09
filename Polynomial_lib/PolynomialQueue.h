@@ -8,7 +8,7 @@
 #include "Polynomial.h"
 #include "List.h"
 
-class PolynomialQueue : public List<Polynomial> {
+class PolynomialQueue : public List<Polynomial*> {
 private:
     class Node{
         friend PolynomialQueue;

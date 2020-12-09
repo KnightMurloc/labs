@@ -1,31 +1,24 @@
-#include "Polynomial.h"
-#include "PolynomialQueue.h"
-#include <vector>
-#include <iostream>
-#include <string>
-#include <fstream>
+#include "Queue.h"
 
 using namespace std;
 
 int main() {
+    Queue<int> queue;
+    {
+        queue.push(1);
+        queue.push(5);
+        queue.push(10);
+    }
 
-    PolynomialQueue queue;
-    double arr[] = {1,2,3};
-    unsigned int len = sizeof(arr) / sizeof(double);
-    auto* p1 = new Polynomial(arr,len);
-    auto* p2 = new Polynomial(arr,len);
-    auto* p3 = new Polynomial(arr,len);
-    p2->setCoefficient(5,0);
-    p3->setCoefficient(10,0);
-    queue.push(p1);
-    queue.push(p2);
-    queue.insert(p3,1);
+    {
+        int test = 0;
+        int a = queue.pop();
+        int b = queue.pop();
+        int c = queue.pop();
 
-
-//    queue.remove(2);
-//    Polynomial* p = queue.pop();
-//    cout << p1 << "\n" << p2 << endl;
-    cout << queue << endl;
-
+//        ASSERT_EQ(a,1);
+//        ASSERT_EQ(b,5);
+//        ASSERT_EQ(c,1);
+    }
     return 0;
 }

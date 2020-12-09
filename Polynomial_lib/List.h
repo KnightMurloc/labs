@@ -8,11 +8,11 @@
 template <typename T>
 class List {
 public:
-    virtual void push(T* p) = 0;
-    virtual T* pop() = 0;
+    virtual void push(T p) = 0;
+    virtual T pop() = 0;
     virtual void remove(unsigned int idx) = 0;
-    virtual void insert(T* p, unsigned int idx) = 0;
-    virtual T* get(unsigned int idx) = 0;
+    virtual void insert(T p, unsigned int idx) = 0;
+    virtual T get(unsigned int idx) = 0;
 };
 
 

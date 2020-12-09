@@ -115,7 +115,7 @@ const Polynomial Polynomial::operator--(int) {
     return temp;
 }
 
-double Polynomial::operator[](unsigned int i) {
+double Polynomial::operator[](unsigned int i) const {
     return getCoefficient(i);
 }
 
@@ -295,6 +295,28 @@ Polynomial operator-(Polynomial &p1, Polynomial &p2) {
 
 double* Polynomial::getCoefficients() {
     return coefficients;
+}
+
+Polynomial &Polynomial::operator=(const Polynomial &p) {
+    this->order = p.order;
+    this->coefficients = new double[order];
+    memcpy(this->coefficients, p.coefficients, order * sizeof(double));
+    count++;
+    return *this;
+}
+
+bool operator==(const Polynomial p1,const Polynomial p2) {
+    if(p1.order != p2.order){
+        return false;
+    }
+
+    for (unsigned int i = 0; i < p1.order; ++i) {
+        if(p1[i] != p2[i]){
+            return false;
+        }
+    }
+
+    return true;
 }
 
 //void operator<<(std::stringstream& stream, Polynomial& p) {
